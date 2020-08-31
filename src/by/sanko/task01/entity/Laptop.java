@@ -1,5 +1,8 @@
 package by.sanko.task01.entity;
 
+import java.util.Objects;
+import java.util.StringTokenizer;
+
 public class Laptop extends Appliance {
     private int batteryCapacity;
     private String OS;
@@ -16,6 +19,19 @@ public class Laptop extends Appliance {
         this.CPU = CPU;
         this.displayINCH = displayINCH;
     }
+
+    public Laptop(String input){
+        StringTokenizer tokenizer = new StringTokenizer(input);
+        tokenizer.nextToken();
+        tokenizer.nextToken();
+        batteryCapacity = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
+        OS = Appliance.parseValue(tokenizer.nextToken());
+        memoryROM = Long.parseLong(parseValue(tokenizer.nextToken()));
+        systemMemory = Long.parseLong(parseValue(tokenizer.nextToken()));
+        CPU = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        displayINCH = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
+    }
+
 
     public int getBatteryCapacity() {
         return batteryCapacity;
@@ -39,6 +55,31 @@ public class Laptop extends Appliance {
 
     public int getDisplayINCH() {
         return displayINCH;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Laptop laptop = (Laptop) o;
+        return getBatteryCapacity() == laptop.getBatteryCapacity() &&
+                getMemoryROM() == laptop.getMemoryROM() &&
+                getSystemMemory() == laptop.getSystemMemory() &&
+                Double.compare(laptop.getCPU(), getCPU()) == 0 &&
+                getDisplayINCH() == laptop.getDisplayINCH() &&
+                getOS().equals(laptop.getOS());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (int)batteryCapacity;
+        result = 31 * result + OS != null ? OS.hashCode() : 0;
+        result = (int) (31 * result + memoryROM);
+        result = (int) (31 * result + systemMemory);
+        result = 31 * result + (int)CPU;
+        result = 31 * result + displayINCH;
+        return result;
     }
 
     @Override

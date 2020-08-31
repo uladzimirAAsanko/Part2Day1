@@ -1,5 +1,8 @@
 package by.sanko.task01.entity;
 
+import java.util.Objects;
+import java.util.StringTokenizer;
+
 public class Refrigerator extends Appliance {
     private double powerConsumption;
     private double weight;
@@ -15,6 +18,18 @@ public class Refrigerator extends Appliance {
         this.overallCapacity = overallCapacity;
         this.height = height;
         this.width = width;
+    }
+
+    public Refrigerator(String input){
+        StringTokenizer tokenizer = new StringTokenizer(input);
+        tokenizer.nextToken();
+        tokenizer.nextToken();
+        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        weight = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        freezerCapacity = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        overallCapacity = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        height = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        width = Double.parseDouble(parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {
@@ -39,6 +54,31 @@ public class Refrigerator extends Appliance {
 
     public double getWidth() {
         return width;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Refrigerator that = (Refrigerator) o;
+        return Double.compare(that.getPowerConsumption(), getPowerConsumption()) == 0 &&
+                Double.compare(that.getWeight(), getWeight()) == 0 &&
+                Double.compare(that.getFreezerCapacity(), getFreezerCapacity()) == 0 &&
+                Double.compare(that.getOverallCapacity(), getOverallCapacity()) == 0 &&
+                Double.compare(that.getHeight(), getHeight()) == 0 &&
+                Double.compare(that.getWidth(), getWidth()) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (int)powerConsumption;
+        result = (int) (31 * result + weight);
+        result = (int) (31 * result + freezerCapacity);
+        result = (int) (31 * result + overallCapacity);
+        result = 31 * result + (int)height;
+        result = 31 * result + (int)width;
+        return result;
     }
 
     @Override

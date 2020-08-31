@@ -1,5 +1,8 @@
 package by.sanko.task01.entity;
 
+import java.util.Objects;
+import java.util.StringTokenizer;
+
 public class VacuumCleaner extends Appliance {
     private double powerConsumption;
     private String filterType;
@@ -15,6 +18,18 @@ public class VacuumCleaner extends Appliance {
         this.wandType = wandType;
         this.motorSpeedRegulation = motorSpeedRegulation;
         this.cleaningWidth = cleaningWidth;
+    }
+
+    public VacuumCleaner(String input){
+        StringTokenizer tokenizer = new StringTokenizer(input);
+        tokenizer.nextToken();
+        tokenizer.nextToken();
+        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        filterType = parseValue(tokenizer.nextToken());
+        bagType = parseValue(tokenizer.nextToken());
+        wandType = parseValue(tokenizer.nextToken());
+        motorSpeedRegulation = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
+        cleaningWidth = Double.parseDouble(parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {
@@ -39,6 +54,31 @@ public class VacuumCleaner extends Appliance {
 
     public double getCleaningWidth() {
         return cleaningWidth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VacuumCleaner that = (VacuumCleaner) o;
+        return Double.compare(that.getPowerConsumption(), getPowerConsumption()) == 0 &&
+                getMotorSpeedRegulation() == that.getMotorSpeedRegulation() &&
+                Double.compare(that.getCleaningWidth(), getCleaningWidth()) == 0 &&
+                getFilterType().equals(that.getFilterType()) &&
+                getBagType().equals(that.getBagType()) &&
+                getWandType().equals(that.getWandType());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (int)powerConsumption;
+        result = 31 * result + (int)motorSpeedRegulation;
+        result = 31 * result + (int)cleaningWidth;
+        result = 31 * result + filterType != null ? filterType.hashCode() : 0;
+        result = 31 * result + bagType != null ? bagType.hashCode() : 0;
+        result = 31 * result + wandType != null ? wandType.hashCode() : 0;
+        return result;
     }
 
     @Override

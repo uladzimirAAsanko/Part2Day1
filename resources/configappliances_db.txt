@@ -1,0 +1,6 @@
+Oven 1
+Laptop 5
+Refrigerator 9
+VacuumCleaner 13
+TabletPC 17
+Speakers 21

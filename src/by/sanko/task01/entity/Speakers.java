@@ -1,5 +1,8 @@
 package by.sanko.task01.entity;
 
+import java.util.Objects;
+import java.util.StringTokenizer;
+
 public class Speakers extends Appliance {
     private double powerConsumption;
     private double numberOfSpeakers;
@@ -11,6 +14,16 @@ public class Speakers extends Appliance {
         this.numberOfSpeakers = numberOfSpeakers;
         this.frequencyRange = frequencyRange;
         this.cordLength = cordLength;
+    }
+
+    public Speakers(String input){
+        StringTokenizer tokenizer = new StringTokenizer(input);
+        tokenizer.nextToken();
+        tokenizer.nextToken();
+        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        numberOfSpeakers = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        frequencyRange = parseValue(tokenizer.nextToken());
+        cordLength = Double.parseDouble(parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {
@@ -27,6 +40,28 @@ public class Speakers extends Appliance {
 
     public double getCordLength() {
         return cordLength;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Speakers speakers = (Speakers) o;
+        return Double.compare(speakers.getPowerConsumption(), getPowerConsumption()) == 0 &&
+                Double.compare(speakers.getNumberOfSpeakers(), getNumberOfSpeakers()) == 0 &&
+                Double.compare(speakers.getCordLength(), getCordLength()) == 0 &&
+                getFrequencyRange().equals(speakers.getFrequencyRange());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (int)powerConsumption;
+        result = 31 * result + (int)numberOfSpeakers;
+        result = 31 * result + (int)cordLength;
+        result = 31 * result + frequencyRange != null ? frequencyRange.hashCode() : 0;
+
+        return result;
     }
 
     @Override
