@@ -1,9 +1,10 @@
 package by.sanko.task01.entity;
 
-import java.util.Objects;
+import by.sanko.task01.service.parser.DataParser;
+
 import java.util.StringTokenizer;
 
-public class Laptop extends Appliance {
+public class Laptop implements Appliance {
     private int batteryCapacity;
     private String OS;
     private long memoryROM;
@@ -24,12 +25,13 @@ public class Laptop extends Appliance {
         StringTokenizer tokenizer = new StringTokenizer(input);
         tokenizer.nextToken();
         tokenizer.nextToken();
-        batteryCapacity = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
-        OS = Appliance.parseValue(tokenizer.nextToken());
-        memoryROM = Long.parseLong(parseValue(tokenizer.nextToken()));
-        systemMemory = Long.parseLong(parseValue(tokenizer.nextToken()));
-        CPU = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        displayINCH = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
+        DataParser parser = DataParser.getInstance();
+        batteryCapacity = Integer.parseInt(parser.parseValue(tokenizer.nextToken()));
+        OS = parser.parseValue(tokenizer.nextToken());
+        memoryROM = Long.parseLong(parser.parseValue(tokenizer.nextToken()));
+        systemMemory = Long.parseLong(parser.parseValue(tokenizer.nextToken()));
+        CPU = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        displayINCH = Integer.parseInt(parser.parseValue(tokenizer.nextToken()));
     }
 
 

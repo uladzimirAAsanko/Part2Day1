@@ -18,8 +18,13 @@ public class ApplianceDAOImpl implements ApplianceDAO {
     private static final String FILE_PATH = "path";
     private static final String FILE_CONFIG = "config";
     private static final String SPACE = " ";
+    private static final String SLASH = "/";
     private static final String END_LINE = "\n";
     private static final String PATH_TO_RESOURCES = "resources";
+    private static final String RESOURCES_BUNDLE_DOESNT_EXIST_MSG = "ResourceBundle does not exist";
+    private static final String FILE_DOESNT_EXIST_MSG = "File does not exist";
+    private static final String TYPE_OF_APPLIANCE_NOT_IN_STORAGE = "Cannot find this type of Appliance in Storage";
+
 
     @Override
     public List<Appliance> find(Criteria criteria) throws DAOException {
@@ -28,7 +33,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
         String filePath = pathOutput.substring(0,pathOutput.indexOf(' '));
         String fileName = pathOutput.substring(pathOutput.indexOf(' ') + 1);
 
-        try(BufferedReader database = new BufferedReader(new FileReader(filePath + "/" + fileName))) {
+        try(BufferedReader database = new BufferedReader(new FileReader(filePath + SLASH + fileName))) {
             int numberOfLine = findNeededLine(criteria.getGroupSearchName(), fileName);
             for(int i = 1; i < numberOfLine; i++){
                 database.readLine();
@@ -36,7 +41,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
             ApplianceCreator creator = new ApplianceCreator();
 
             String line = database.readLine();
-            while(!line.isEmpty() && line != null){
+            while(!line.isEmpty()){
                 AtomicBoolean isItOur = new AtomicBoolean(true);
                 String finalLine = line;
 
@@ -49,7 +54,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
                         }
                         String searchArea = finalLine.substring(posOfName, posOfDelimeter);
                         searchArea = searchArea.substring(searchArea.indexOf('=') + 1);
-                        if (!searchArea.equals("" + data)) { // так делать если закидываем примитивные классы, если обертки то toString нужно делать
+                        if (!searchArea.equals("" + data)) {
                             isItOur.set(false);
                         }
                     }
@@ -60,9 +65,12 @@ public class ApplianceDAOImpl implements ApplianceDAO {
                 }
                 line = database.readLine();
             }
-
         }catch (IOException e){
-            throw new DAOException(e.getMessage());
+            StringBuilder msg = new StringBuilder(e.getMessage() + SPACE);
+            for(Throwable t : e.getSuppressed()){
+                msg.append(t.getMessage()).append(SPACE);
+            }
+            throw new DAOException(msg.toString(),e);
         }
         return result;
     }
@@ -76,20 +84,20 @@ public class ApplianceDAOImpl implements ApplianceDAO {
             if(Files.exists(Paths.get(filePath, fileName))) {
                 path = filePath +" " + fileName;
             } else {
-                throw new DAOException("File does not exist");
+                throw new DAOException(FILE_DOESNT_EXIST_MSG);
             }
             if(!Files.exists(Paths.get(PATH_TO_RESOURCES,FILE_CONFIG+fileName))){
                 describeFile(filePath,fileName);
             }
             return path;
         } catch (MissingResourceException e) {
-            throw new DAOException("ResourceBundle does not exist", e);
+            throw new DAOException(RESOURCES_BUNDLE_DOESNT_EXIST_MSG, e);
         }
     }
 
     private void describeFile(String filePath, String fileName) throws DAOException {
-        try(FileOutputStream fileOutputStream = new FileOutputStream(new File(PATH_TO_RESOURCES + "/" + FILE_CONFIG+  fileName));
-            BufferedReader reader = new BufferedReader(new FileReader(filePath+"/" + fileName))){
+        try(FileOutputStream fileOutputStream = new FileOutputStream(new File(PATH_TO_RESOURCES + SLASH + FILE_CONFIG+  fileName));
+            BufferedReader reader = new BufferedReader(new FileReader(filePath + SLASH + fileName))){
 
             String line = "";
             int countOfLines = 1;
@@ -108,13 +116,17 @@ public class ApplianceDAOImpl implements ApplianceDAO {
                 countOfLines++;
             }
         } catch (IOException e) {
-            throw new DAOException("Error in description of file " + fileName);
+            StringBuilder msg = new StringBuilder(e.getMessage() + SPACE);
+            for(Throwable t : e.getSuppressed()){
+                msg.append(t.getMessage()).append(SPACE);
+            }
+            throw new DAOException(msg.toString(), e);
         }
     }
 
     private int findNeededLine(String criteria, String fileName) throws DAOException {
         int numberOfLine = -1;
-        try(BufferedReader config = new BufferedReader(new FileReader(PATH_TO_RESOURCES + "/" + FILE_CONFIG+  fileName))) {
+        try(BufferedReader config = new BufferedReader(new FileReader(PATH_TO_RESOURCES + SLASH + FILE_CONFIG+  fileName))) {
 
             String inputLine = "";
             while ((inputLine = config.readLine()) != null) {
@@ -125,10 +137,14 @@ public class ApplianceDAOImpl implements ApplianceDAO {
                 }
             }
             if (numberOfLine == -1) {
-                throw new DAOException("Cannot find this type of Appliance in Storage");
+                throw new DAOException(TYPE_OF_APPLIANCE_NOT_IN_STORAGE);
             }
         }catch (IOException e){
-            throw new DAOException(e.getMessage());
+            StringBuilder msg = new StringBuilder(e.getMessage() + SPACE);
+            for(Throwable t : e.getSuppressed()){
+                msg.append(t.getMessage()).append(SPACE);
+            }
+            throw new DAOException(msg.toString(),e);
         }
         return numberOfLine;
     }

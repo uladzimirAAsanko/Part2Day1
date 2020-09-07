@@ -1,9 +1,10 @@
 package by.sanko.task01.entity;
 
-import java.util.Objects;
+import by.sanko.task01.service.parser.DataParser;
+
 import java.util.StringTokenizer;
 
-public class VacuumCleaner extends Appliance {
+public class VacuumCleaner implements Appliance {
     private double powerConsumption;
     private String filterType;
     private String bagType;
@@ -24,12 +25,13 @@ public class VacuumCleaner extends Appliance {
         StringTokenizer tokenizer = new StringTokenizer(input);
         tokenizer.nextToken();
         tokenizer.nextToken();
-        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        filterType = parseValue(tokenizer.nextToken());
-        bagType = parseValue(tokenizer.nextToken());
-        wandType = parseValue(tokenizer.nextToken());
-        motorSpeedRegulation = Integer.parseInt(Appliance.parseValue(tokenizer.nextToken()));
-        cleaningWidth = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        DataParser parser = DataParser.getInstance();
+        powerConsumption = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        filterType = parser.parseValue(tokenizer.nextToken());
+        bagType = parser.parseValue(tokenizer.nextToken());
+        wandType = parser.parseValue(tokenizer.nextToken());
+        motorSpeedRegulation = Integer.parseInt(parser.parseValue(tokenizer.nextToken()));
+        cleaningWidth = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {

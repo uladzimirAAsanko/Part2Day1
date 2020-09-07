@@ -9,7 +9,6 @@ import by.sanko.task01.exception.ServiceException;
 import by.sanko.task01.service.ApplianceService;
 import by.sanko.task01.service.validation.Validator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,7 +27,7 @@ public class ApplianceServiceImpl implements ApplianceService {
         try {
             appliance = applianceDAO.find(criteria);
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getMessage(),e);
         }
 
         return appliance;

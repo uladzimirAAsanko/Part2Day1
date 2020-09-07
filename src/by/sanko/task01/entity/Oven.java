@@ -1,9 +1,11 @@
 package by.sanko.task01.entity;
 
+import by.sanko.task01.service.parser.DataParser;
+
 import java.util.Objects;
 import java.util.StringTokenizer;
 
-public class Oven extends Appliance {
+public class Oven implements Appliance {
     private double powerConsumption;
     private double weight;
     private double capacity;
@@ -24,12 +26,13 @@ public class Oven extends Appliance {
         StringTokenizer tokenizer = new StringTokenizer(input);
         tokenizer.nextToken();
         tokenizer.nextToken();
-        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        weight = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        capacity = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        depth = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        height = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        width = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        DataParser parser = DataParser.getInstance();
+        powerConsumption = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        weight = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        capacity = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        depth = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        height = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        width = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {

@@ -1,9 +1,10 @@
 package by.sanko.task01.entity;
 
-import java.util.Objects;
+import by.sanko.task01.service.parser.DataParser;
+
 import java.util.StringTokenizer;
 
-public class Speakers extends Appliance {
+public class Speakers implements Appliance {
     private double powerConsumption;
     private double numberOfSpeakers;
     private String frequencyRange;
@@ -20,10 +21,11 @@ public class Speakers extends Appliance {
         StringTokenizer tokenizer = new StringTokenizer(input);
         tokenizer.nextToken();
         tokenizer.nextToken();
-        powerConsumption = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        numberOfSpeakers = Double.parseDouble(parseValue(tokenizer.nextToken()));
-        frequencyRange = parseValue(tokenizer.nextToken());
-        cordLength = Double.parseDouble(parseValue(tokenizer.nextToken()));
+        DataParser parser = DataParser.getInstance();
+        powerConsumption = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        numberOfSpeakers = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
+        frequencyRange = parser.parseValue(tokenizer.nextToken());
+        cordLength = Double.parseDouble(parser.parseValue(tokenizer.nextToken()));
     }
 
     public double getPowerConsumption() {
